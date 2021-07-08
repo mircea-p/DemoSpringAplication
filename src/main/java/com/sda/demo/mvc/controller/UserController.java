@@ -53,14 +53,20 @@ public class UserController {
     }
 
     @DeleteMapping("/users")
-    public ResponseEntity<String> deleteUser(@RequestParam String username) {
-        User user = userService.deleteUser(username);
-        return new ResponseEntity<String>("We deleted: " + user.toString(), HttpStatus.OK);
+    public ResponseEntity<String> deleteUser(@RequestParam(value="username", required = false) String username) {
+        if (username.isEmpty()) {
+            throw new IllegalArgumentException("Username not provided, plese mention user to delete!");
+        } else {
+            userService.deleteUser(username);
+            return new ResponseEntity<String>("We deleted with success! ", HttpStatus.OK);
+        }
     }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> catchIllegalArgumentException(IllegalArgumentException e) {
         return new ResponseEntity<>("Illegal arguments " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
+    // todo PuTmapping
+    //todo play with get
 
 }

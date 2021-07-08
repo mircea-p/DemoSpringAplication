@@ -6,6 +6,7 @@ import com.sda.demo.mvc.repository.UserRepositoryIF;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,11 +22,12 @@ public class UserService {
     private UserRepositoryIF userRepositoryIF;
 
     public List<User> findUsersInAgeGroup(int x, int y) {
-        List<User> allUsers = userRepository.findAllUsers();
-        // filter, map, collect.
-        return allUsers.stream()
-                .filter(user -> user.getAge() > x && user.getAge() < y)
-                .collect(Collectors.toList());
+//        List<User> allUsers = userRepository.findAllUsers();
+//        // filter, map, collect.
+//        return allUsers.stream()
+//                .filter(user -> user.getAge() > x && user.getAge() < y)
+//                .collect(Collectors.toList());
+        return userRepositoryIF.getAllByAgeBetween(x,y);
     }
 
     public void saveUser(User user) {
@@ -36,21 +38,27 @@ public class UserService {
         } else
             throw new IllegalArgumentException("NU ati adaugat probabil toate campurile");
     }
+    @Transactional
+    public void deleteUser(String username) {
+//        List<User> allUsers = userRepository.findAllUsers();
+//        Integer i = null;
+//        for (User user : allUsers) {
+//            if (user.getUsername().equals(username))
+//                i = allUsers.indexOf(user);
+//        }
+//        if (i != null) {
+//            return userRepository.delete(i);
+//        }
+//        else
+//            throw new IllegalArgumentException("Nu e cutarica, bre, (user not found)");
 
-    public User deleteUser(String username) {
-        List<User> allUsers = userRepository.findAllUsers();
-        Integer i = null;
-        for (User user : allUsers) {
-            if (user.getUsername().equals(username))
-                i = allUsers.indexOf(user);
-        }
-        if (i != null) {
-            return userRepository.delete(i);
-        }
+        Integer idUserDeleted = userRepositoryIF.deleteByUsername(username);
+        if(idUserDeleted == 0)
+            log.warn("User- ul nu exista, deci nu avem ce sterge.");
         else
-            throw new IllegalArgumentException("Nu e cutarica, bre, (user not found)");
-
+            log.info("Am sters userul cu id - ul: " + idUserDeleted);
 
     }
+
 
     }
