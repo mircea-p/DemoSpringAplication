@@ -31,12 +31,10 @@ public class UserService {
     }
 
     public void saveUser(User user) {
-        if (user.getName() != null && user.getAge() != 0 && user.getUsername() != null && user.getEmail() != null && user.getPassword() != null) {
+     //   if (user.getName() != null && user.getAge() != 0 && user.getUsername() != null && user.getEmail() != null && user.getPassword() != null) {
             userRepositoryIF.save(user);
-         //   userRepository.addNewUser(user);
             log.info("Sefule, alo, am salvat un user nou!!!");
-        } else
-            throw new IllegalArgumentException("NU ati adaugat probabil toate campurile");
+
     }
     @Transactional
     public void deleteUser(String username) {
@@ -57,6 +55,12 @@ public class UserService {
             log.warn("User- ul nu exista, deci nu avem ce sterge.");
         else
             log.info("Am sters userul cu id - ul: " + idUserDeleted);
+
+    }
+    public User updateUser(User user){
+
+        saveUser(user);
+        return user;
 
     }
 

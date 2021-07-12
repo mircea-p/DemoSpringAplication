@@ -9,4 +9,5 @@ import java.util.List;
 public interface UserRepositoryIF extends CrudRepository<User, Integer> {
   Integer deleteByUsername(String username);
   List<User> getAllByAgeBetween(Integer minAge, Integer maxAge);
+
 }
